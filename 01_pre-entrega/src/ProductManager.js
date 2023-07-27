@@ -43,7 +43,7 @@ class ProductManager {
   constructor() {
     ProductManager.id;
     this.#productos = new Array();
-    this.#dirPath = '../file';
+    this.#dirPath = './file';
     this.#filePath = this.#dirPath + "/Products.json";
     this.#fileSystem = fs;
   }
