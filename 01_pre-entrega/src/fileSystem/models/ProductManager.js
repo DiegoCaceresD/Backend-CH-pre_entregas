@@ -1,6 +1,5 @@
 import fs from "fs";
-import __dirname from "./utils.js";
-
+import __dirname from "../utils.js";
 
 const requiredProperties = [
   "code",
@@ -35,7 +34,7 @@ class Producto {
 }
 
 class ProductManager {
-  static id = 0;
+  static id = 0; 
   #productos;
   #filePath;
   #dirPath;

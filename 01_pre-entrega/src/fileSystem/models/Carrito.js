@@ -1,6 +1,6 @@
 import fs from "fs";
-import ProductManager from "./ProductManager.js";
-import __dirname from "./utils.js";
+import ProductManager from "../ProductManager.js";
+import __dirname from "../../utils.js";
 
 class Carrito {
   constructor() {

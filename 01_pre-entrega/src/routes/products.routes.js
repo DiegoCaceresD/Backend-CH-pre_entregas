@@ -1,10 +1,17 @@
-import { Router } from "express";
-import ProductManager from "../ProductManager.js";
 import { uploader } from "../utils.js";
+import express from "express"
+import * as ProductController from "../db/controllers/productsController.js"
+// import { Router } from "express";
+// import ProductManager from "../ProductManager.js";
+// const productManager = new ProductManager();
 
-const router = Router();
-const productManager = new ProductManager();
+const router = express.Router();
 
+router.post("/", ProductController.addProduct)
+
+router.get("/", ProductController.getProducts)
+
+function fileSystem(){
 //GET
 router.get("/", async (req, res) => {
   try {
@@ -27,6 +34,7 @@ router.get("/", async (req, res) => {
 router.get("/:pid", async (req, res) => {
   try {
     let idProduct = parseInt(req.params.pid);
+    console.log("pid: ", idProduct);
     let producto = await productManager.getProductoById(idProduct);
     return res.send({ status: "succes", payload: JSON.stringify(producto) });
   } catch (error) {
@@ -76,5 +84,7 @@ router.delete("/:pid", async (req, res) => {
     return res.status(error.status).send({ status: "error", msg: error.msg });
   }
 });
+}
+
 
 export default router;
