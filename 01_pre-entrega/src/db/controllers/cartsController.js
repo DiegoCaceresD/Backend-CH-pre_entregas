@@ -75,8 +75,9 @@ export async function deleteAllProductsInCart(req,res) {
     try {
         let idCart = req.params.cid;
         await CartsService.deleteProductInCart(idCart);
-        return res.send({ status: "succes", msg:`El carrito ${cid} fue eliminado exitosamente!`});
+        return res.send({ status: "succes", msg:`El carrito ${idCart} fue eliminado exitosamente!`});
     } catch (error) {
+        console.log(error);
         res.status(500).send({ status: "error", msg: error });
     }
 }
