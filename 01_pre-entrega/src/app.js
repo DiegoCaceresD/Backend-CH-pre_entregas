@@ -1,9 +1,10 @@
 import express from "express";
 import productsRoutes from './routes/products.routes.js'
 import cartsRoutes from './routes/carts.routes.js'
+import viewsRoutes from './routes/views.router.js'
 import mongoose from "mongoose";
 import __dirname from "./utils.js";
-
+import handlebars from 'express-handlebars';
 const app = express();
 const PORT = 8080;
 
@@ -11,10 +12,16 @@ const PORT = 8080;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(__dirname + '/db/js'))
 
-app.use('/api/products', productsRoutes)
-app.use('/api/carts', cartsRoutes)
+app.use('/api/products', productsRoutes);
+app.use('/api/carts', cartsRoutes);
+app.use('/', viewsRoutes);
+
+app.engine('handlebars', handlebars.engine());
+app.set('views', __dirname + '/views');
+app.set('view engine', 'handlebars');
+app.use(express.static(__dirname + '/public'))
 
 app.listen(PORT, () => {
   console.log(`Server run on port: ${PORT}`);
