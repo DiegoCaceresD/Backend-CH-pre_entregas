@@ -1,5 +1,5 @@
-import * as CartsService from "../services/cartsService.js"
-import * as ProductService from "../services/productService.js"
+import * as CartsService from "../../db/services/cartsService.js"
+import * as ProductService from "../../db/services/productService.js"
 const productsDiv = document.getElementById('product');
 
 async function renderProducts(){
