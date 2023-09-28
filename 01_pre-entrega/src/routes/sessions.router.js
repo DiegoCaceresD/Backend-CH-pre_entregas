@@ -21,11 +21,12 @@ router.post("/register", async (req, res) => {
     res.send({ status: "success", message: "Usuario creado con exito con ID: " + result.id })
 });
 
+
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
-    const user = await userModel.findOne({ email, password });
+    const user = await userModel.findOne({ email, password })
+
     if (!user) return res.status(401).send({ status: "error", error: "Incorrect credentials" })
-    console.log("req.session", req.session);
     req.session.user = {
         name: `${user.first_name} ${user.last_name}`,
         email: user.email,
