@@ -6,8 +6,7 @@ form.addEventListener('submit', e => {
 
     const obj = {};
     data.forEach((value, key) => obj[key] = value);
-    console.log("Objeto formado:");
-    console.log(obj);
+    console.log("Objeto formado:", obj);
     fetch('/api/sessions/register', {
         method: 'POST',
         body: JSON.stringify(obj),
@@ -15,7 +14,8 @@ form.addEventListener('submit', e => {
             'Content-Type': 'application/json'
         }
     }).then(result => {
-        if (result.status === 200) {
+        console.log(result.status);
+        if (result.status === 201) {
             window.location.replace('/users/login')
         }
     })
