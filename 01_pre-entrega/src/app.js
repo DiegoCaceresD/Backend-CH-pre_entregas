@@ -4,6 +4,7 @@ import cartsRoutes from './routes/carts.routes.js'
 import usersViewRouter from './routes/users.views.router.js';
 import sessionsRouter from './routes/sessions.router.js'
 import viewsRoutes from './routes/views.router.js'
+import githubLoginViewRouter from './routes/github-login.views.router.js'
 import mongoose from "mongoose";
 import __dirname from "./utils.js";
 import handlebars from 'express-handlebars';
@@ -52,6 +53,7 @@ app.use('/api/carts', cartsRoutes);
 app.use("/users", usersViewRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use('/', viewsRoutes);
+app.use('/github', githubLoginViewRouter);
 
 app.listen(PORT, () => {
   console.log(`Server run on port: ${PORT}`);
