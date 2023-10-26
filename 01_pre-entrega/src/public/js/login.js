@@ -12,8 +12,20 @@ form.addEventListener('submit', e => {
             'Content-Type': 'application/json'
         }
     }).then(result => {
+        // if (result.status === 200) {
+        //     window.location.replace('/users');
+        // }
         if (result.status === 200) {
-            window.location.replace('/users');
+            result.json()
+                .then(json => {
+                    // cookie
+                    console.log("Cookies generadas:");
+                    console.log(document.cookie);
+
+                })
+        } else if (result.status === 401) {
+            console.log(result);
+            alert("Login invalido revisa tus credenciales!");
         }
     })
 })

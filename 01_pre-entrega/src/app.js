@@ -12,6 +12,7 @@ import session from 'express-session';
 import MongoStore from "connect-mongo";
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import cookieParser from "cookie-parser";
 
 const app = express();
 const PORT = 8080;
@@ -40,7 +41,10 @@ app.use(session({
   secret: "coderS3cret",
   resave: false,
   saveUninitialized: true,
-}))
+}));
+
+//Cookies
+app.use(cookieParser("coderS3cret"));
 
 //middlewares
 initializePassport();
