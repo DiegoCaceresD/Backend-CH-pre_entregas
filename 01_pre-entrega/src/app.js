@@ -1,9 +1,9 @@
 import express from "express";
-import productsRoutes from './routes/products.routes.js'
-import cartsRoutes from './routes/carts.routes.js'
+import productsRoutes from './routes/products.routes.js';
+import cartsRoutes from './routes/carts.routes.js';
 import usersViewRouter from './routes/users.views.router.js';
-import viewsRoutes from './routes/views.router.js'
-import githubLoginViewRouter from './routes/github-login.views.router.js'
+import viewsRoutes from './routes/views.router.js';
+import githubLoginViewRouter from './routes/github-login.views.router.js';
 import mongoose from "mongoose";
 import __dirname from "./utils.js";
 import handlebars from 'express-handlebars';
@@ -12,15 +12,15 @@ import MongoStore from "connect-mongo";
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import cookieParser from "cookie-parser";
-import UserExtendRouter from "./routes/custom/users.extend.router.js"
 import SessionRouter from "./routes/sessions.router.js";
+import config from "./config/config.js";
+
 
 const app = express();
-const PORT = 8080;
-const DB = 'mongodb+srv://dcaceres2097:di5sL8gQZrSmgA0s@cluster0.77np4wo.mongodb.net/proyecto?retryWrites=true&w=majority'
-const usersExtendRouter = new UserExtendRouter();
+const PORT = config.port;
+const DB = config.mongoUrl;
 const sessionRouter = new SessionRouter();
-
+ 
 //Preparo al servidor para que pueda trabajar con archivos JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
