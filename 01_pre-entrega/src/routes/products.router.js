@@ -1,6 +1,6 @@
 import { uploader } from "../utils.js";
 import express from "express"
-import * as ProductController from "../db/controllers/productsController.js"
+import * as ProductController from "../controllers/productsController.js"
 // import { Router } from "express";
 // import ProductManager from "../ProductManager.js";
 // const productManager = new ProductManager();

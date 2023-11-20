@@ -1,6 +1,6 @@
 import express from "express"
 import { uploader } from "../utils.js";
-import * as CartsController from "../db/controllers/cartsController.js"
+import * as CartsController from "../controllers/cartsController.js"
 // import { Router } from "express"
 // import CarritoManager from "../fileSystem/Carrito.js";
 // const carritoManager = new CarritoManager;
