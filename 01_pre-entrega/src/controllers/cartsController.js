@@ -32,6 +32,8 @@ export async function addProductTocartById(req,res) {
     try {
         let idCart = req.params.cid;
         let idProduct = req.params.pid;
+        console.log("cartID" ,idCart);
+        console.log("productID" ,idProduct);
         let response = await cartsService.addProductTocartById(idCart, idProduct);
         return res.send({ status: "success", msg:"producto agregado exitosamente", response: response});
     } catch (error) {

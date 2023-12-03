@@ -1,3 +1,4 @@
+import ProductsDTO from "../services/DTO/productDTO.js";
 import { productsService } from "../services/factory.js";
 
 
@@ -28,7 +29,10 @@ export async function getProducts(req,res){
 
         
         let products = await productsService.getProducts(optionsQuery, options);
-        res.status(200).send(products);
+        console.log("products: ", products.payload);
+        const productsDTO = products.payload.map(product => new ProductsDTO(product));
+        console.log("productsDTO: ", productsDTO);
+        res.status(200).send(productsDTO);
     } catch (error) {
         res.status(400).json(error.message)
     }

@@ -33,9 +33,10 @@ export default class cartService {
     }
     addProductTocartById = async (idCart, idProduct) => {
         try {
-            let cart = await CartModel.findOne({_id: idCart})
-                cart.products.push({product: idProduct})
-                let response = CartModel.updateOne(cart)
+            let response = await CartModel.updateOne(
+                { _id: idCart },
+                { $push: { products: { product: idProduct } } }
+            );
             return response;
         } catch (error) {
             throw error;
