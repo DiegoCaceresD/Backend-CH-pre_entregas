@@ -1,9 +1,10 @@
-import * as ProductService from "../services/productService.js"
+import { productsService } from "../services/factory.js";
+
 
 export async function addProduct(req, res) {
     try {
         const { body } = req;
-        const response = await ProductService.addProduct(body);
+        const response = await productsService.addProduct(body);
         res.status(200).json(response);
     } catch (error) {
         res.status(400).json(error.message)
@@ -26,7 +27,7 @@ export async function getProducts(req,res){
         if(sort) options.sort = {price:sort}    
 
         
-        let products = await ProductService.getProducts(optionsQuery, options);
+        let products = await productsService.getProducts(optionsQuery, options);
         res.status(200).send(products);
     } catch (error) {
         res.status(400).json(error.message)

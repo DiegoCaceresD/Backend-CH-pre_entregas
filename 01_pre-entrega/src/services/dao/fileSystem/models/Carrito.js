@@ -1,6 +1,6 @@
 import fs from "fs";
-import ProductManager from "../ProductManager.js";
-import __dirname from "../../utils.js";
+import ProductManager from "../models/ProductManager.js";
+import __dirname from "../../../../utils.js";
 
 class Carrito {
   constructor() {
@@ -15,7 +15,7 @@ class CarritoManager {
   #fileSystem;
   constructor() {
     this.#carritos = new Array();
-    this.#dirPath = "./file"; // todo consultar
+    this.#dirPath = "./file"; 
     this.#filePath = this.#dirPath + "/Carritos.json";
     this.#fileSystem = fs;
   }

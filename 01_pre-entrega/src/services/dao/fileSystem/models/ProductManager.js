@@ -1,5 +1,5 @@
 import fs from "fs";
-import __dirname from "../utils.js";
+import __dirname from "../../../../utils.js";
 
 const requiredProperties = [
   "code",
@@ -114,7 +114,7 @@ class ProductManager {
     }
   };
 
-  getProductos = async () => {  
+  getProducts = async () => {  
     try {
       let productos = await this.#fileSystem.promises.readFile(
         this.#filePath,
@@ -131,7 +131,7 @@ class ProductManager {
     let isProduct = false;
     let producto;
     try {
-      let productos = await this.getProductos();
+      let productos = await this.getProducts();
 
       this.#productos = JSON.parse(productos);
       this.#productos.forEach((element) => {
@@ -157,7 +157,7 @@ class ProductManager {
 
     try {
       let isProduct = false;
-      let productos = await this.getProductos();
+      let productos = await this.getProducts();
 
       this.#productos = JSON.parse(productos);
       this.#productos.map((producto) => {
@@ -184,7 +184,7 @@ class ProductManager {
   deleteProduct = async (id) => {
     let productsFilter;
     try {
-      let productos = await this.getProductos();
+      let productos = await this.getProducts();
 
       this.#productos = JSON.parse(productos);
       productsFilter = this.#productos.filter(

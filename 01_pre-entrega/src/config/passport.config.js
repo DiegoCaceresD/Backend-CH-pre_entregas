@@ -1,6 +1,6 @@
 import passport from "passport";
 import passportLocal from "passport-local";
-import userModel from "../db/models/user.model.js";
+import userModel from "../services/dao/db/models/user.model.js";
 import GitHubStrategy from "passport-github2";
 import { createHash, isValidPassword } from "../utils.js";
 import jwtStrategy from "passport-jwt";
@@ -124,6 +124,20 @@ const initializePassport = () => {
             console.log("invalid credentials for user: " + username);
             return done(null, false);
           }
+
+          const tokenUser = {
+            name: `${user.first_name} ${user.last_name}`,
+            email: user.email,
+            age: user.age,
+            role: user.role
+        }
+
+        const access_token = generateJWToken(tokenUser)
+        console.log("access_token login localStrategy: ", access_token);
+
+        // // 1ro LocalStorage
+        res.send({ message: "Login successful!", jwt: access_token })
+
 
           return done(null, user);
         } catch (error) {

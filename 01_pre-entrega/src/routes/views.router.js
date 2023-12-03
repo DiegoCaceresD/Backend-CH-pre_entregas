@@ -1,6 +1,6 @@
 import {Router} from 'express';
 // import * as CartsService from "../db/services/cartsService"
-import { ProductModel}  from "../db/models/product.model.js";
+import { ProductModel}  from "../services/dao/db/models/product.model.js";
 // import { CartModel } from '../db/models/cart.model.js';
 
 const router = Router();
