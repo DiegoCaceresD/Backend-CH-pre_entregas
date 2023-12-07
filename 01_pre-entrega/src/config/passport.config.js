@@ -5,6 +5,7 @@ import GitHubStrategy from "passport-github2";
 import { createHash, isValidPassword, generateJWToken } from "../utils.js";
 import jwtStrategy from "passport-jwt";
 import { PRIVATE_KEY } from "../utils.js";
+import { cartsService } from "../services/factory.js" 
 //estrategia
 const localStrategy = passportLocal.Strategy;
 const JwtStrategy = jwtStrategy.Strategy;
@@ -85,6 +86,7 @@ const initializePassport = () => {
             console.warn("Usuario ya existe: " + username);
             return done(null, false);
           }
+          const newCart = await cartsService.createCart();
 
           const user = {
             first_name,
@@ -92,6 +94,7 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
+            cart: newCart._id,
             loggedBy: "Local",
           };
 
