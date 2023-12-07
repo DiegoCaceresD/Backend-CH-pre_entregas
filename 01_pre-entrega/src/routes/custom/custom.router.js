@@ -32,6 +32,24 @@ export default class CustomRouter {
     );
   }
 
+  put(path,policies, ...callbacks) {
+    this.router.put(
+      path,
+      this.handelPolicies(policies),
+      this.generateCustomResponse,
+      this.applyCallbacks(callbacks)
+    );
+  }
+  delete(path,policies, ...callbacks) {
+    this.router.delete(
+      path,
+      this.handelPolicies(policies),
+      this.generateCustomResponse,
+      this.applyCallbacks(callbacks)
+    );
+  }
+
+
   handelPolicies = (policies) => (req, res, next) => {
     console.log("Politicas a evaluar: ", policies);
     if (policies[0] === "PUBLIC") {
@@ -40,7 +58,7 @@ export default class CustomRouter {
 
     //El JWT token se guarda en los headers de autorización.
     const authHeader = req.headers.authorization;
-    console.log("reqq: ", req.headers);
+    console.log("req: ", req.headers);
     console.log("Token present in header auth: ", authHeader);
     if (!authHeader) {
       return res

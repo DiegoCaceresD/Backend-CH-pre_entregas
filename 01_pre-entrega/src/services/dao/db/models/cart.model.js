@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
 
-const cartColection = 'cart';
+const cartColection = 'Cart';
 
 
 const ArrayTypeSchemaNonUniqueRequired = {
@@ -11,18 +11,17 @@ const ArrayTypeSchemaNonUniqueRequired = {
 };
 
 const cartSchema = new mongoose.Schema({
-    products: {
-        type:[
-            {
-                product:{
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "products"
-                }
-            }
-        ],
-        default: []
-    }
-})
+    products: [{
+      product: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product"
+      },
+      quantity: {
+        type: Number,
+        default: 1 
+      }
+    }],
+  });
 cartSchema.plugin(mongoosePaginate)
 
 export const CartModel = mongoose.model(cartColection, cartSchema)

@@ -10,14 +10,14 @@ constructor(){
             const response = await ProductModel.create(data);
             return response
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error.message);
         }
     }
     
     getProducts = async ( optionsQuery, options) => {
         try {
             let data = await ProductModel.paginate(optionsQuery, options);
-            if(data.docs.length == 0) return {status: "Success", msg: "No se encontro ningun producto con los parametros indicados"}
+            if(data.docs.length === 0) return {status: "Success", msg: "No se encontro ningun producto con los parametros indicados"}
             let response = {
                 status: 'success',
                 payload: data.docs,
@@ -32,8 +32,29 @@ constructor(){
             }
             return response;
         } catch (error) {
-            return{error: error, status: "error"}
+            return{error: error.message, status: "error"}
         }
 
+    }
+
+    getProductById = async (idProduct) => {
+        try {
+            const response = await ProductModel.findById(idProduct)
+            return response;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    updateProduct = async (idProduct, data) => {
+        try {
+            let response;
+            if (data) {
+                response = await ProductModel.findByIdAndUpdate(idProduct, data, {new: true} )
+            }
+            return response
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 }

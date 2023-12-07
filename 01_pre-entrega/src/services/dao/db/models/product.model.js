@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2';
 
-const productColection = 'products';
+const productColection = 'Product';
 
 const stringTypeSchemaUniqueRequired = {
     type: String,

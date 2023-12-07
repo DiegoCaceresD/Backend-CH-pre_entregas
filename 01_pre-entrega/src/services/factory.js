@@ -3,6 +3,7 @@ import MongoSingleton from "../config/mongodb-singleton.js";
 
 let productsService
 let cartsService
+let ticketService
 
 async function initializeMongoService() {
   console.log("Iniciando servicio para MongoDB");
@@ -20,6 +21,11 @@ async function initializeMongoService() {
     cartsService = new CartsServiceMongo();
     console.log("Servicio de carts cargado:");
     console.log(cartsService);
+
+    const { default: TicketServiceMongo } = await import('./dao/db/services/TicketService.js');
+    ticketService = new TicketServiceMongo();
+    console.log("Servicio de ticket cargado:");
+    console.log(ticketService);
 
 
 } catch (error) {
@@ -42,6 +48,11 @@ switch (config.persistence) {
     cartsService = new CartsServiceFileSystem();
     console.log("Servicio de carts cargado: ", cartsService);
 
+    const { default: TicketServiceFileSystem } = await import('./dao/db/services/TicketService.js');
+    ticketService = new TicketServiceFileSystem();
+    console.log("Servicio de ticket cargado:");
+    console.log(ticketService);
+
     break;
 
   default:
@@ -49,4 +60,4 @@ switch (config.persistence) {
     process.exit(1);
 }
 
-export { productsService, cartsService };
+export { productsService, cartsService, ticketService };

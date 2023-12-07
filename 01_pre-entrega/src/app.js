@@ -1,5 +1,4 @@
 import express from "express";
-import productsRoutes from './routes/products.router.js';
 import cartsRoutes from './routes/carts.router.js';
 import usersViewRouter from './routes/users.views.router.js';
 import viewsRoutes from './routes/views.router.js';
@@ -17,12 +16,14 @@ import cors from 'cors';
 import MongoSingleton from "./config/mongodb-singleton.js";
 import emailRouter from './routes/email.router.js'
 import smsRouter from './routes/sms.router.js'
+import ProductRouter from "./routes/products.router.js";
 
 
 const app = express();
 const PORT = config.port;
 const DB = config.mongoUrl;
 const sessionRouter = new SessionRouter();
+const productRouter = new ProductRouter();
  
 //Preparo al servidor para que pueda trabajar con archivos JSON
 app.use(express.json());
@@ -61,7 +62,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Routes
-app.use('/api/products', productsRoutes);
+app.use('/api/products', productRouter.getRouter());
 app.use('/api/carts', cartsRoutes);
 app.use("/users", usersViewRouter);
 app.use("/api/sessions", sessionRouter.getRouter());

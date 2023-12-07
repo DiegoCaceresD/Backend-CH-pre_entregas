@@ -2,7 +2,7 @@ import passport from "passport";
 import passportLocal from "passport-local";
 import userModel from "../services/dao/db/models/user.model.js";
 import GitHubStrategy from "passport-github2";
-import { createHash, isValidPassword } from "../utils.js";
+import { createHash, isValidPassword, generateJWToken } from "../utils.js";
 import jwtStrategy from "passport-jwt";
 import { PRIVATE_KEY } from "../utils.js";
 //estrategia
@@ -13,14 +13,14 @@ const ExtractJWT = jwtStrategy.ExtractJwt;
 const initializePassport = () => {
   //---------------------JWT--------------------
   passport.use(
-    'jwt',
+    "jwt",
     new JwtStrategy(
       //extraer cookie
       {
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: PRIVATE_KEY
+        secretOrKey: PRIVATE_KEY,
       },
-      async(jwt_payload, done) => {
+      async (jwt_payload, done) => {
         console.log("inicio - Passport Strategy JWT");
         try {
           console.log("JWT obtenido del payload: ", jwt_payload);
@@ -104,14 +104,13 @@ const initializePassport = () => {
     )
   );
 
-
   //login
   passport.use(
     "login",
     new localStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
-        const { first_name, last_name, email, age } = req.body;
+        // const { first_name, last_name, email, age } = req.body;
         try {
           const user = await userModel.findOne({ email: username });
 
@@ -129,15 +128,11 @@ const initializePassport = () => {
             name: `${user.first_name} ${user.last_name}`,
             email: user.email,
             age: user.age,
-            role: user.role
-        }
+            role: user.role,
+          };
 
-        const access_token = generateJWToken(tokenUser)
-        console.log("access_token login localStrategy: ", access_token);
-
-        // // 1ro LocalStorage
-        res.send({ message: "Login successful!", jwt: access_token })
-
+          const access_token = generateJWToken(tokenUser);
+          console.log("access_token login localStrategy: ", access_token);
 
           return done(null, user);
         } catch (error) {
@@ -166,12 +161,12 @@ const initializePassport = () => {
 };
 
 // funcion para extraer cookie
-const cookieExtractor = req => {
+const cookieExtractor = (req) => {
   let token = null;
   console.log("Inicio - Cookie Extractor");
   if (req && req.cookies) {
     console.log("cookies presentes: ", req.cookies);
-    token = req.cookies['access_Token'];
+    token = req.cookies["access_Token"];
     console.log("Token obtenido desde Cookie: ", token);
   }
   console.log("Fin - Cookie Extractor");
