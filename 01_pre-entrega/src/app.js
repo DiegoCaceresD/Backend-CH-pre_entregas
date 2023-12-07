@@ -17,7 +17,7 @@ import MongoSingleton from "./config/mongodb-singleton.js";
 import emailRouter from './routes/email.router.js'
 import smsRouter from './routes/sms.router.js'
 import ProductRouter from "./routes/products.router.js";
-
+import compression from "express-compression";
 
 const app = express();
 const PORT = config.port;
@@ -29,11 +29,15 @@ const productRouter = new ProductRouter();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//GZIP
+app.use(compression({
+  brotli: {enabled:true, zlib: {}}
+}))
 //Habilito las politicas de cors
 app.use(cors());
 
 app.use(express.static(__dirname + '/db/js'))
-
+ 
 
 //views
 app.engine('handlebars', handlebars.engine());

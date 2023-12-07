@@ -1,7 +1,7 @@
-import userModel from "../services/dao/db/models/user.model.js";
 import ProductsDTO from "../services/DTO/productDTO.js";
 import { productsService } from "../services/factory.js";
 import { generateProducts } from "../utils.js";
+
 
 export async function addProduct(req, res) {
   try {

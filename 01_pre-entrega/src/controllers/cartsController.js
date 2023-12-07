@@ -1,5 +1,5 @@
 import { cartsService } from "../services/factory.js";
-import { ticketService } from "../services/factory.js"
+import { ticketService } from "../services/factory.js";
 
 export async function createCart(req, res) {
   try {
@@ -99,7 +99,7 @@ export async function deleteAllProductsInCart(req, res) {
 }
 
 // todo terminar de implementar
-export async function purchase (req, res) {
+export async function purchase(req, res) {
   try {
     const cartId = req.params.cid;
     const cart = await cartsService.getCartById(cartId);
@@ -112,7 +112,7 @@ export async function purchase (req, res) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
-};
+}
 
 export const purchaseCart = async (req, res) => {
   try {
@@ -120,18 +120,31 @@ export const purchaseCart = async (req, res) => {
     let purchaserEmail = req.user.email ? req.user.email : "user@example.com";
     const cart = await cartsService.getCartById(cartId);
     // Verificar el stock y realizar la compra
-    const purchaseResult = await ticketService.generateTicket(cart, purchaserEmail);
+    const purchaseResult = await ticketService.generateTicket(
+      cart,
+      purchaserEmail
+    );
 
     // Manejar la respuesta del TicketService
     if (purchaseResult.status === "success") {
-      return res.status(200).json({ status: "success", msg: "Compra realizada con éxito", ticketId: purchaseResult.ticketId });
+      return res
+        .status(200)
+        .json({
+          status: "success",
+          msg: "Compra realizada con éxito",
+          ticketId: purchaseResult.ticketId,
+        });
     } else {
-      return res.status(400).json({ status: "error", msg: "No se pudo completar la compra", failedProductIds: purchaseResult.failedProductIds });
+      return res
+        .status(400)
+        .json({
+          status: "error",
+          msg: "No se pudo completar la compra",
+          failedProductIds: purchaseResult.failedProductIds,
+        });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ status: "error", msg: error.message });
   }
 };
-
-

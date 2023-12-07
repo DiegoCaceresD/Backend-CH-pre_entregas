@@ -1,6 +1,11 @@
 import { Router } from "express";
 import passport from "passport";
 import CustomRouter from "./custom/custom.router.js";
+import errorHandler from "../services/errors/middlewares/index.js"
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/errors-enum.js";
+
+
 const router = Router();
 
 export default class SessionRouter extends CustomRouter{
@@ -49,7 +54,7 @@ export default class SessionRouter extends CustomRouter{
           const user = req.user;
           console.log(user);
     
-          if (!user) return res.status(401).send({ status: "error", error: "credenciales incorrectas" });
+          if (!user) CustomError.createError({name: "User Login", cause:"Credenciales incorrectas", code:EErrors.INVALID_CREDENTIALS, message: user });
     
           req.session.user = {
             name: `${user.first_name} ${user.last_name}`,
@@ -61,14 +66,15 @@ export default class SessionRouter extends CustomRouter{
     );
     
     this.get("/fail-register",["PUBLIC"], (req, res) => {
-      res.sendsendUnauthorizedError("Failed to process register");
+      res.sendUnauthorizedError("Failed to process register");
     });
     
     this.get("/fail-login",["PUBLIC"], (req, res) => {
-      res.sendsendUnauthorizedError("Failed to process login");
+      res.sendUnauthorizedError("Failed to process login");
     });
 
   }
 }
+router.use(errorHandler)
 
 
