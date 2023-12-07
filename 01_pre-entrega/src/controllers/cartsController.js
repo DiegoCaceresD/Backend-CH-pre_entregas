@@ -1,5 +1,8 @@
 import { cartsService } from "../services/factory.js";
 import { ticketService } from "../services/factory.js";
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/errors-enum.js";
+import { cartErrorInfo } from "../services/errors/messages/product-error.message.js";
 
 export async function createCart(req, res) {
   try {
@@ -32,8 +35,14 @@ export async function addProductTocartById(req, res) {
   try {
     let idCart = req.params.cid;
     let idProduct = req.params.pid;
-    console.log("cartID", idCart);
-    console.log("productID", idProduct);
+    if (!idCart || idProduct) {
+      CustomError.createError({
+        name: "Adding product Error",
+        cause: cartErrorInfo({ idCart, idProduct }),
+        message: "Error tratando añadir producto al carrito",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
     let response = await cartsService.addProductToCartById(idCart, idProduct);
     return res.send({
       status: "success",
@@ -60,6 +69,15 @@ export async function UpdateProductQuantity(req, res) {
   let idCart = req.params.cid;
   let idProduct = req.params.pid;
   let newQuantity = req.body;
+
+  if (!idCart || idProduct) {
+    CustomError.createError({
+      name: "Update Quantity Error",
+      cause: cartErrorInfo({ idCart, idProduct }),
+      message: "Error tratando de actualizar el carrito",
+      code: EErrors.INVALID_TYPES_ERROR,
+    });
+  }
   try {
     await cartsService.UpdateProductQuantity(idCart, idProduct, newQuantity);
     return res.send({
@@ -74,6 +92,14 @@ export async function deleteProductInCart(req, res) {
   try {
     let idCart = req.params.cid;
     let idProduct = req.params.pid;
+    if (!idCart || idProduct) {
+      CustomError.createError({
+        name: "delete products in cart Error",
+        cause: cartErrorInfo({ idCart, idProduct }),
+        message: "Error tratando de eliminar los productos del carrito",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
     await cartsService.deleteProductInCart(idCart, idProduct);
     return res.send({
       status: "success",
@@ -127,21 +153,17 @@ export const purchaseCart = async (req, res) => {
 
     // Manejar la respuesta del TicketService
     if (purchaseResult.status === "success") {
-      return res
-        .status(200)
-        .json({
-          status: "success",
-          msg: "Compra realizada con éxito",
-          ticketId: purchaseResult.ticketId,
-        });
+      return res.status(200).json({
+        status: "success",
+        msg: "Compra realizada con éxito",
+        ticketId: purchaseResult.ticketId,
+      });
     } else {
-      return res
-        .status(400)
-        .json({
-          status: "error",
-          msg: "No se pudo completar la compra",
-          failedProductIds: purchaseResult.failedProductIds,
-        });
+      return res.status(400).json({
+        status: "error",
+        msg: "No se pudo completar la compra",
+        failedProductIds: purchaseResult.failedProductIds,
+      });
     }
   } catch (error) {
     console.error(error);

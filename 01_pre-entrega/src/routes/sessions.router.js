@@ -1,9 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
 import CustomRouter from "./custom/custom.router.js";
-import errorHandler from "../services/errors/middlewares/index.js"
-import CustomError from "../services/errors/CustomError.js";
-import EErrors from "../services/errors/errors-enum.js";
 
 
 const router = Router();
@@ -75,6 +72,5 @@ export default class SessionRouter extends CustomRouter{
 
   }
 }
-router.use(errorHandler)
 
 
