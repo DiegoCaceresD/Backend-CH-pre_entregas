@@ -1,11 +1,21 @@
 import ProductsDTO from "../services/DTO/productDTO.js";
 import { productsService } from "../services/factory.js";
 import { generateProducts } from "../utils.js";
+import { productErrorInfo } from "../services/errors/messages/product-error.message.js";
 
 
 export async function addProduct(req, res) {
   try {
     const { body } = req;
+
+    if (!body) {
+      CustomError.createError({
+        name: "Product creation Error",
+        cause: productErrorInfo(body),
+        message: "Error tratando de crear el prducto",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
     const response = await productsService.addProduct(body);
     res.status(200).json(response);
   } catch (error) {
@@ -52,6 +62,14 @@ export async function getProductById(req, res) {
 export async function updateProduct(req, res) {
   let idProduct = req.params.pid;
   let data = req.body;
+  if (!data) {
+    CustomError.createError({
+      name: "Product creation Error",
+      cause: productErrorInfo(body),
+      message: "Error tratando de crear el prducto",
+      code: EErrors.INVALID_TYPES_ERROR,
+    });
+  }
   try {
     let productUpdated = await productsService.updateProduct(idProduct, data);
     return res.send({ status: "success", response: productUpdated });
@@ -79,7 +97,7 @@ export async function getMockingProducts(req, res) {
     let products = [];
 
     for (let i = 0; i < 100; i++) {
-      products.push(generateProducts())
+      products.push(generateProducts());
     }
     return res.send({
       status: "success",
@@ -87,6 +105,8 @@ export async function getMockingProducts(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).send({ status: "error", msg: "No se pudo generar los productos" });
+    res
+      .status(500)
+      .send({ status: "error", msg: "No se pudo generar los productos" });
   }
 }

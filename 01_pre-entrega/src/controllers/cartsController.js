@@ -2,7 +2,7 @@ import { cartsService } from "../services/factory.js";
 import { ticketService } from "../services/factory.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/errors-enum.js";
-import { cartErrorInfo } from "../services/errors/messages/product-error.message.js";
+import { cartErrorInfo } from "../services/errors/messages/cart-error.message.js";
 
 export async function createCart(req, res) {
   try {
