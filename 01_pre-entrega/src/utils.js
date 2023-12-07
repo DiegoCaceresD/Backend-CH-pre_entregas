@@ -2,7 +2,8 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import multer from 'multer';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
+import { faker } from '@faker-js/faker';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename)
 
@@ -47,3 +48,16 @@ export const uploader = multer({
         next();
     }
 });
+
+faker.locale = 'es';
+
+export const generateProducts = () => {
+    return {
+    id: faker.database.mongodbObjectId(),
+    title: faker.commerce.productName(),
+    description: faker.commerce.productDescription(),
+    price: faker.commerce.price(),
+    stock: faker.random.numeric(1),
+    category: faker.commerce.department()
+    }
+};

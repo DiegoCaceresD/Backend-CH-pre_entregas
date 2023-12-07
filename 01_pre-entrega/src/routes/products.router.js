@@ -20,6 +20,8 @@ export default class ProductRouter extends CustomRouter{
 
     this.delete("/:pid",["ADMIN"], ProductController.deleteProduct);
 
+    this.get("/mockingproducts/faker", ["PUBLIC"], ProductController.getMockingProducts);
+
   }
 }
 

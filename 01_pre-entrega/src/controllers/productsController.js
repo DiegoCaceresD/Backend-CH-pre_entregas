@@ -1,5 +1,7 @@
+import userModel from "../services/dao/db/models/user.model.js";
 import ProductsDTO from "../services/DTO/productDTO.js";
 import { productsService } from "../services/factory.js";
+import { generateProducts } from "../utils.js";
 
 export async function addProduct(req, res) {
   try {
@@ -63,11 +65,28 @@ export async function deleteProduct(req, res) {
   try {
     await productsService.deleteProduct(idProduct);
     return res.send({
-      status: "succes",
+      status: "success",
       msg: `El Producto ${idProduct} due eliminado del almacen exitosamente`,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).send({ status: "error", msg: error });
+    res.status(500).send({ status: "error", msg: error.message });
+  }
+}
+
+export async function getMockingProducts(req, res) {
+  try {
+    let products = [];
+
+    for (let i = 0; i < 100; i++) {
+      products.push(generateProducts())
+    }
+    return res.send({
+      status: "success",
+      payload: products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ status: "error", msg: "No se pudo generar los productos" });
   }
 }
