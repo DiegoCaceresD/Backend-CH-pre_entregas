@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import config from "../config/config.js";
+import logger from "../config/logger.js";
 import _dirname from "../utils.js";
 
 const transporter = nodemailer.createTransport({
@@ -13,9 +14,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify(function (error, success) {
   if (error) {
-    console.error(error);
+    logger.error(error);
   } else {
-    console.log("Server is ready to take our messages");
+    logger.info("Server is ready to take our messages");
   }
 });
 
@@ -52,15 +53,15 @@ export const sendEmail = (req, res) => {
   try {
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error(error);
+        logger.error(error);
         res.status(400).send({ message: "Error", payload: error });
       }
 
-      console.log("Message sent: %s", info.messageId);
+      logger.info("Message sent: %s", info.messageId);
       res.send({ message: "success", payload: info });
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .send({
@@ -75,15 +76,15 @@ export const sendEmailWithAttachments = (req, res) => {
     try {
         transporter.sendMail(mailOptionsWithAttachments, (error, info) => {
             if (error) {
-              console.error(error);
+              logger.error(error);
               res.status(400).send({ message: "Error", payload: error });
             }
       
-            console.log("Message sent: %s", info.messageId);
+            logger.info("Message sent: %s", info.messageId);
             res.send({ message: "success", payload: info });
           });
     } catch (error) {
-        console.error(error);
+        logger.error(error);
     res
       .status(500)
       .send({

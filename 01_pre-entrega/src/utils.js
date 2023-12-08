@@ -6,13 +6,15 @@ import jwt from 'jsonwebtoken';
 import { faker } from '@faker-js/faker';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename)
+import  logger  from "./config/logger.js";
 
 export default __dirname;
 
 //bcrypt
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 export const isValidPassword = (user , password) =>{
-    console.log(`Datos a validar_ user-password: ${user.password}, password: ${password}`);
+
+    logger.info(`Datos a validar_ user-password: ${user.password}, password: ${password}`);
     return bcrypt.compareSync(password, user.password);
 }
 
@@ -43,8 +45,8 @@ const storage = multer.diskStorage(
 export const uploader = multer({
     storage,
     // si se genera algun error, lo capturamos
-    onError: function (err, next) {
-        console.log(err);
+    onError: function (error, next) {
+        logger.error(error);
         next();
     }
 });

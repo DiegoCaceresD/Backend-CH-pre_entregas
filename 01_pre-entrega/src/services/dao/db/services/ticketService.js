@@ -1,10 +1,11 @@
 import { TicketModel } from "../models/ticket.model.js";
 import { productsService } from "../../../factory.js";
 import { cartsService } from "../../../factory.js";
+import logger from "../../../../config/logger.js";
 
 export default class TicketService {
   constructor() {
-    console.log("Working with Ticket Database");
+    logger.debug("Working with Ticket Database");
   }
 
   generateTicket = async (cart, purchaserEmail) => {
@@ -19,7 +20,7 @@ export default class TicketService {
       const ticket = await TicketModel.create(ticketData);
       return { status: "success", ticketId: ticket._id, failedProductIds: [] };
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       return {
         status: "error",
         ticketId: null,
@@ -128,7 +129,7 @@ export const purchaseCart = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ status: "error", msg: error.message });
   }
 };

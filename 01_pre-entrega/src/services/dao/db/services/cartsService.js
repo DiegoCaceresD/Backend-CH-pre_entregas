@@ -1,11 +1,10 @@
-import CustomError from "../../../errors/CustomError.js";
-import { cartErrorInfo } from "../../../errors/messages/cart-error.message.js";
+import logger from "../../../../config/logger.js";
 import { CartModel } from "../models/cart.model.js";
-import  EErrors  from "../../../errors/errors-enum.js"
+
 
 export default class cartService {
   constructor() {
-    console.log("Working courses with Database persistence in mongodb");
+    logger.debug("Working courses with Database persistence in mongodb");
   }
 
   createCart = async () => {
@@ -59,7 +58,7 @@ export default class cartService {
         const response = await cart.save();
       return response;
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw new Error(error);
     }
   };

@@ -1,4 +1,5 @@
 import { Command} from "commander";
+import  logger  from "./config/logger.js";
 
 const program = new Command();
 
@@ -8,7 +9,5 @@ program
 .option('--mode <mode>', 'Modo de trabajo' ,'develop')
 .option('-u <user>', 'Usuario que va a utilizar la app', 'No se declaró ningun usuario')
 program.parse() // parsea los commandos y valida que sean correctos
-
-console.log("Options: ", program.opts());
 
 export default program

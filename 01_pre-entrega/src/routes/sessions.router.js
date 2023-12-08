@@ -1,5 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
+import logger from "../config/logger.js";
 import CustomRouter from "./custom/custom.router.js";
 
 
@@ -37,7 +38,7 @@ export default class SessionRouter extends CustomRouter{
         failureRedirect: "/api/sessions/fail-register",
       }),
       async (req, res) => {
-        console.log(req.user.first_name);
+        logger.info("Usuario registrado exitosamente");
         res.sendCreated(`Usuario: ${req.user.first_name} ${req.user.last_name}`);
       }
     );
@@ -47,10 +48,9 @@ export default class SessionRouter extends CustomRouter{
       passport.authenticate("login", {
         failureRedirect: "/api/sessions/fail-login",
       }), async (req, res) => {
-          console.log("User found to login:");
+          logger.info("User found to login:");
           const user = req.user;
-          console.log(user);
-    
+  
           if (!user) CustomError.createError({name: "User Login", cause:"Credenciales incorrectas", code:EErrors.INVALID_CREDENTIALS, message: user });
     
           req.session.user = {

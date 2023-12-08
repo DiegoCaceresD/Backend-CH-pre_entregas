@@ -12,14 +12,12 @@ router.get('/products',async(req,res)=>{
     result.prevLink = result.hasPrevPage ? `http://localhost:8080/products?page=${result.prevPage}` : '';
     result.nextLink = result.hasNextPage ? `http://localhost:8080/products?page=${result.nextPage}` : '';
     result.isValid = !(page <= 0 || page > result.totalPages)
-    // console.log(result);
     res.render('products',result)
 })
 
 
 // router.get('/courses',async(req,res)=>{
 //     let cart = await CartsService.getCartById();
-//     console.log(courses);
 //     res.render('courses',{courses})
 // })
 

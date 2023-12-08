@@ -3,6 +3,7 @@ import { ticketService } from "../services/factory.js";
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/errors-enum.js";
 import { cartErrorInfo } from "../services/errors/messages/cart-error.message.js";
+import logger from "../config/logger.js";
 
 export async function createCart(req, res) {
   try {
@@ -26,7 +27,7 @@ export async function getCartById(req, res) {
     let cart = await cartsService.getCartById(idCart);
     return res.send({ status: "success", payload: cart });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send({ status: "error", msg: error });
   }
 }
@@ -42,7 +43,7 @@ export async function addProductTocartById(req, res) {
       response: response,
     });
   } catch (error) {
-    console.log("error en Controller: ", error);
+    logger.error("error en Controller: ", error);
     res.status(500).send({ status: "error", msg: error.message });
   }
 }
@@ -53,7 +54,7 @@ export async function updateCart(req, res) {
     let cartUpdated = await cartsService.updateCart(idCart, data);
     return res.send({ status: "success", response: cartUpdated });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     return res.status(500).send({ status: "error", msg: error });
   }
 }
@@ -98,7 +99,7 @@ export async function deleteProductInCart(req, res) {
       msg: `Producto ${idProduct}, fue elminidao del carrito ${idCart} exitosamente!`,
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send({ status: "error", msg: error });
   }
 }
@@ -111,7 +112,7 @@ export async function deleteAllProductsInCart(req, res) {
       msg: `El carrito ${idCart} fue vaciado exitosamente!`,
     });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send({ status: "error", msg: error });
   }
 }
@@ -127,7 +128,7 @@ export async function purchase(req, res) {
 
     return res.status(200).json(purchaseResult);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ error: error.message });
   }
 }
@@ -158,7 +159,7 @@ export const purchaseCart = async (req, res) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res.status(500).json({ status: "error", msg: error.message });
   }
 };

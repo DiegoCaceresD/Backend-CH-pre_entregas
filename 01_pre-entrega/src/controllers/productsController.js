@@ -2,14 +2,15 @@ import ProductsDTO from "../services/DTO/productDTO.js";
 import { productsService } from "../services/factory.js";
 import { generateProducts } from "../utils.js";
 import { productErrorInfo } from "../services/errors/messages/product-error.message.js";
-
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/errors-enum.js";
 
 export async function addProduct(req, res) {
   try {
     const { body } = req;
 
     if (!body) {
-      CustomError.createError({
+      throw CustomError.createError({
         name: "Product creation Error",
         cause: productErrorInfo(body),
         message: "Error tratando de crear el prducto",
@@ -55,26 +56,26 @@ export async function getProductById(req, res) {
     const productDTO = new ProductsDTO(product);
     return res.status(200).send({ status: "success", payload: productDTO });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error)
     res.status(500).send({ status: "error", msg: error });
   }
 }
 export async function updateProduct(req, res) {
   let idProduct = req.params.pid;
   let data = req.body;
-  if (!data) {
-    CustomError.createError({
-      name: "Product creation Error",
-      cause: productErrorInfo(body),
-      message: "Error tratando de crear el prducto",
-      code: EErrors.INVALID_TYPES_ERROR,
-    });
-  }
   try {
+    if (!data) {
+      throw CustomError.createError({
+        name: "Product creation Error",
+        cause: productErrorInfo(body),
+        message: "Error tratando de crear el prducto",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
     let productUpdated = await productsService.updateProduct(idProduct, data);
     return res.send({ status: "success", response: productUpdated });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error)
     return res.status(500).send({ status: "error", msg: error });
   }
 }
@@ -87,7 +88,7 @@ export async function deleteProduct(req, res) {
       msg: `El Producto ${idProduct} due eliminado del almacen exitosamente`,
     });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error)
     res.status(500).send({ status: "error", msg: error.message });
   }
 }
@@ -104,7 +105,7 @@ export async function getMockingProducts(req, res) {
       payload: products,
     });
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     res
       .status(500)
       .send({ status: "error", msg: "No se pudo generar los productos" });

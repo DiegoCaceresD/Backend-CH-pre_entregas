@@ -1,4 +1,5 @@
 import fs from "fs";
+import logger from "../../../../config/logger.js";
 import __dirname from "../../../../utils.js";
 
 const requiredProperties = [
@@ -61,7 +62,7 @@ class ProductManager {
     );
     let invalidProp,nuevoId = 0;
     let nuevoProductoProperties = Object.keys(producto);
-    console.log("Nuevo producto: ", nuevoProducto);
+    logger.info("Nuevo producto: ", nuevoProducto);
 
     try {
       // creamos el directorio
@@ -109,7 +110,7 @@ class ProductManager {
         JSON.stringify(this.#productos, null, 2, "\t")
       );
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw {status: 400, msg: error}
     }
   };
@@ -122,7 +123,7 @@ class ProductManager {
       );
       return productos;
     } catch (error) {
-      console.log("no se ha podido consultar al archivo");
+      logger.error("no se ha podido consultar al archivo");
       throw error
     }
   };
@@ -147,7 +148,7 @@ class ProductManager {
       return producto;
 
     } catch (error) {
-      console.log(error);
+      logger.error(error);
       throw {status: 400, msg: `Error al intentar consultar el id del producto - ${error}` }
     }
   };
@@ -168,7 +169,6 @@ class ProductManager {
         }
         productosActualizados.push(producto);
       });
-      console.log(productosActualizados);
 
       await this.#fileSystem.promises.writeFile(
         this.#filePath,
@@ -176,7 +176,7 @@ class ProductManager {
       );
       if (!isProduct) throw `invalid id ${id}`;
     } catch (error) {
-      console.log(`Error al intentar consultar el id del producto - ${error}`);
+      logger.warning(`Error al intentar consultar el id del producto - ${error}`);
       throw {status:400, msg: `Error al intentar consultar el id del producto - ${error}`}
     }
   };
@@ -196,7 +196,7 @@ class ProductManager {
         JSON.stringify(productsFilter, null, 2, "\t")
       );
     } catch {
-      console.log("no se pudo eliminar el archivo");
+      logger.error("no se pudo eliminar el archivo");
     }
   };
 }

@@ -2,7 +2,7 @@
 
 export default class TicketService {
     constructor(){
-        console.log("Working with Ticket FileSystem")
+        logger.debug("Working with Ticket FileSystem")
     }
 
     performPurchase = async (cart) => {

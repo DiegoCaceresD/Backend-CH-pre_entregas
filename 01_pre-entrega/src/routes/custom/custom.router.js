@@ -1,5 +1,6 @@
 import { Router } from "express";
 import Jwt from "jsonwebtoken";
+import logger from "../../config/logger.js";
 import { PRIVATE_KEY } from "../../utils.js";
 
 export default class CustomRouter {
@@ -51,15 +52,15 @@ export default class CustomRouter {
 
 
   handelPolicies = (policies) => (req, res, next) => {
-    console.log("Politicas a evaluar: ", policies);
+    logger.info("Politicas a evaluar: ", policies);
     if (policies[0] === "PUBLIC") {
       return next();
     }
 
     //El JWT token se guarda en los headers de autorización.
     const authHeader = req.headers.authorization;
-    console.log("req: ", req.headers);
-    console.log("Token present in header auth: ", authHeader);
+    logger.debug("req: ", req.headers);
+    logger.debug("Token present in header auth: ", authHeader);
     if (!authHeader) {
       return res
         .status(401)
@@ -72,11 +73,11 @@ export default class CustomRouter {
         return res.status(403).send({ error: "Token invalid, Unauthorized!" });
       //Token OK
       req.user = credentials.user;
-      console.log("metodo-authToken req.user: ", req.user);
+      logger.debug("metodo-authToken req.user: ", req.user);
       if(!policies.includes(user.role.toUpperCase())) return res.sendForbiddenError("El rol con el que intenta ingresar no cuenta con los privilegios suficientes")
       
       req.user = user;
-      console.log(req.user);
+      logger.info("user: ",req.user);
       next();
     });
   };
@@ -97,7 +98,7 @@ export default class CustomRouter {
       try {
         await callback.apply(this, params);
       } catch (error) {
-        console.log(error);
+        logger.log(error);
         params[1].status(500).send(error);
       }
     });

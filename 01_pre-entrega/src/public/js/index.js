@@ -1,3 +1,4 @@
+import logger from "../../config/logger.js";
 import * as CartsService from "../../db/services/cartsService.js"
 import * as ProductService from "../../db/services/productService.js"
 const productsDiv = document.getElementById('product');
@@ -20,7 +21,7 @@ async function renderProducts(){
 }
 
 function addProductToCart(idProduct) {
-    console.log(idProduct);
+    logger.info(idProduct);
 }
 
 renderProducts();

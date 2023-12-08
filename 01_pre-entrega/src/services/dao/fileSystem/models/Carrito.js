@@ -25,7 +25,6 @@ class CarritoManager {
     try {
       // creamos el directorio
       await this.#fileSystem.promises.mkdir(this.#dirPath, { recursive: true });
-      console.log("creo el dir");
       //valido si ya existe el archivo con productos
       if (!this.#fileSystem.existsSync(this.#filePath)) {
         await this.#fileSystem.promises.writeFile(this.#filePath, "[]");
@@ -133,7 +132,7 @@ class CarritoManager {
       );
 
     } catch (error) {
-      console.log("error: ", error);
+      logger.error("error: ", error);
       throw {status: 400, msg: error}
     }
   };

@@ -1,3 +1,5 @@
+import logger from "../../config/logger.js";
+
 const form = document.getElementById('registerForm');
 
 form.addEventListener('submit', e => {
@@ -6,7 +8,6 @@ form.addEventListener('submit', e => {
 
     const obj = {};
     data.forEach((value, key) => obj[key] = value);
-    console.log("Objeto formado:", obj);
     fetch('/api/sessions/register', {
         method: 'POST',
         body: JSON.stringify(obj),
@@ -14,7 +15,7 @@ form.addEventListener('submit', e => {
             'Content-Type': 'application/json'
         }
     }).then(result => {
-        console.log("result.status: ", result.status);
+        logger.info("result.status: ", result.status);
         if (result.status === 201) {
             window.location.replace('/users/login')
         }

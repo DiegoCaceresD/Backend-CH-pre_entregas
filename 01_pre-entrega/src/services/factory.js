@@ -1,4 +1,5 @@
 import config from "../config/config.js";
+import logger from "../config/logger.js";
 import MongoSingleton from "../config/mongodb-singleton.js";
 
 let productsService
@@ -6,7 +7,7 @@ let cartsService
 let ticketService
 
 async function initializeMongoService() {
-  console.log("Iniciando servicio para MongoDB");
+  logger.debug("Iniciando servicio para MongoDB");
   try {
     // conectamos Mongo
     await MongoSingleton.getInstance()
@@ -14,27 +15,23 @@ async function initializeMongoService() {
     // Creamos las instancias de las Clases de DAO de Mongo
     const { default: ProductsServiceMongo } = await import('./dao/db/services/productService.js');
     productsService = new ProductsServiceMongo();
-    console.log("Servicio de products cargado:");
-    console.log(productsService);
+    logger.debug("Servicio de products cargado: ", productsService);
 
     const { default: CartsServiceMongo } = await import('./dao/db/services/cartsService.js');
     cartsService = new CartsServiceMongo();
-    console.log("Servicio de carts cargado:");
-    console.log(cartsService);
+    logger.debug("Servicio de carts cargado: ", cartsService);
 
     const { default: TicketServiceMongo } = await import('./dao/db/services/TicketService.js');
     ticketService = new TicketServiceMongo();
-    console.log("Servicio de ticket cargado:");
-    console.log(ticketService);
+    logger.debug("Servicio de ticket cargado: ", ticketService);
 
 
 } catch (error) {
-    console.error("Error al iniciar MongoDB:", error);
+    logger.error("Error al iniciar MongoDB: ", error);
     process.exit(1); // Salir con código de error
 }
 }
 
-console.log(config.persistence);
 switch (config.persistence) {
   case "mongodb":
     initializeMongoService();
@@ -42,21 +39,21 @@ switch (config.persistence) {
   case "files":
     const { default: ProductServiceFileSystem } = await import("./dao/fileSystem/models/ProductManager.js");
     productsService = new ProductServiceFileSystem();
-    console.log("Servicio de courses cargado: ", productsService);
+    logger.debug("Servicio de courses cargado: ", productsService);
 
     const { default: CartsServiceFileSystem } = await import("./dao/fileSystem/models/Carrito.js");
     cartsService = new CartsServiceFileSystem();
-    console.log("Servicio de carts cargado: ", cartsService);
+    logger.debug("Servicio de carts cargado: ", cartsService);
 
     const { default: TicketServiceFileSystem } = await import('./dao/db/services/TicketService.js');
     ticketService = new TicketServiceFileSystem();
-    console.log("Servicio de ticket cargado:");
-    console.log(ticketService);
+    logger.debug("Servicio de ticket cargado:");
+    logger.debug(ticketService);
 
     break;
 
   default:
-    console.error("Persistenciaa no válida en la configuración: ",config.persistence);
+    logger.error("Persistenciaa no válida en la configuración: ",config.persistence);
     process.exit(1);
 }
 

@@ -6,6 +6,7 @@ import { createHash, isValidPassword, generateJWToken } from "../utils.js";
 import jwtStrategy from "passport-jwt";
 import { PRIVATE_KEY } from "../utils.js";
 import { cartsService } from "../services/factory.js" 
+import  logger  from "./logger.js";
 //estrategia
 const localStrategy = passportLocal.Strategy;
 const JwtStrategy = jwtStrategy.Strategy;
@@ -22,13 +23,13 @@ const initializePassport = () => {
         secretOrKey: PRIVATE_KEY,
       },
       async (jwt_payload, done) => {
-        console.log("inicio - Passport Strategy JWT");
+        logger.info("inicio - Passport Strategy JWT");
         try {
-          console.log("JWT obtenido del payload: ", jwt_payload);
-          console.log("fin - Passport Strategy JWT");
+          logger.info("JWT obtenido del payload: ", jwt_payload);
+          logger.info("fin - Passport Strategy JWT");
           return done(null, jwt_payload.user);
         } catch (error) {
-          console.error(error);
+          logger.error(error);
           return done(error);
         }
       }
@@ -45,12 +46,12 @@ const initializePassport = () => {
         callbackUrl: "http://localhost:8080/api/sessions/githubcallback",
       },
       async (accessToken, refreshToken, profile, done) => {
-        console.log("profile obtenido del usuario: ", profile);
+        logger.debug("profile obtenido del usuario: ", profile);
 
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (!user) {
-            console.log("usuario no existe: ", profile._json.email);
+            log.warn("usuario no existe: ", profile._json.email);
             let newUser = {
               first_name: profile._json.name,
               last_name: "",
@@ -83,7 +84,7 @@ const initializePassport = () => {
         try {
           const userExist = await userModel.findOne({ email });
           if (userExist) {
-            console.warn("Usuario ya existe: " + username);
+            logger.warning("Usuario ya existe: " + username);
             return done(null, false);
           }
           const newCart = await cartsService.createCart();
@@ -118,12 +119,12 @@ const initializePassport = () => {
           const user = await userModel.findOne({ email: username });
 
           if (!user) {
-            console.warn("Usuario no existe: " + username);
+            logger.warning("Usuario no existe: " + username);
             return done(null, false);
           }
           //validacion con bcrypt
           if (!isValidPassword(user, password)) {
-            console.log("invalid credentials for user: " + username);
+            logger.warn("invalid credentials for user: " + username);
             return done(null, false);
           }
 
@@ -135,7 +136,7 @@ const initializePassport = () => {
           };
 
           const access_token = generateJWToken(tokenUser);
-          console.log("access_token login localStrategy: ", access_token);
+          logger.debug("access_token login localStrategy: ", access_token);
 
           return done(null, user);
         } catch (error) {
@@ -158,7 +159,7 @@ const initializePassport = () => {
       let user = await userModel.findOne({ password: id });
       done(null, user);
     } catch (error) {
-      console.error("Error deserializando el usuario: " + error);
+      logger.info("Error deserializando el usuario: " + error);
     }
   });
 };
@@ -166,13 +167,11 @@ const initializePassport = () => {
 // funcion para extraer cookie
 const cookieExtractor = (req) => {
   let token = null;
-  console.log("Inicio - Cookie Extractor");
   if (req && req.cookies) {
-    console.log("cookies presentes: ", req.cookies);
+    logger.info("cookies presentes: ", req.cookies);
     token = req.cookies["access_Token"];
-    console.log("Token obtenido desde Cookie: ", token);
+    logger.info("Token obtenido desde Cookie: ", token);
   }
-  console.log("Fin - Cookie Extractor");
   return token;
 };
 export default initializePassport;

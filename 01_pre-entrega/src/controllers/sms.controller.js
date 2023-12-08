@@ -1,5 +1,6 @@
 import config from "../config/config.js";
 import twilio from "twilio";
+import logger from "../config/logger.js";
 
 const twilioClient = twilio(
   config.twilioAccountSID,
@@ -14,12 +15,12 @@ const twilioSMSOptions = {
 
 export const sendSMS = async (req, res) => {
   try {
-    console.log('Envio de SMS usando Twilio');
-    console.log(twilioClient);
+    logger.debug('Envio de SMS usando Twilio');
+    logger.debug(twilioClient);
     const result = await twilioClient.messages.create(twilioSMSOptions)
     res.send({msg: 'Succes', payload: result})
   } catch (error) {
-    console.error(error);
+    logger.error.error(error);
     res.status(500).send({ error: error });
   }
 };

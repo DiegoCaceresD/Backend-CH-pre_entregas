@@ -13,12 +13,12 @@ import cookieParser from "cookie-parser";
 import SessionRouter from "./routes/sessions.router.js";
 import config from "./config/config.js";
 import cors from 'cors';
-import MongoSingleton from "./config/mongodb-singleton.js";
+import loggerRouter from "./routes/logger.router.js"
 import emailRouter from './routes/email.router.js'
 import smsRouter from './routes/sms.router.js'
 import ProductRouter from "./routes/products.router.js";
 import compression from "express-compression";
-
+import  logger  from "./config/logger.js";
 const app = express();
 const PORT = config.port;
 const DB = config.mongoUrl;
@@ -28,6 +28,14 @@ const productRouter = new ProductRouter();
 //Preparo al servidor para que pueda trabajar con archivos JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+// **BASE
+app.use((req, res, next) => {
+  req.logger = logger;
+  logger.info(`Request received at: ${new Date().toLocaleString()}`);
+  next();
+});
 
 //GZIP
 app.use(compression({
@@ -74,17 +82,7 @@ app.use('/', viewsRoutes);
 app.use('/github', githubLoginViewRouter);
 app.use('/api/email', emailRouter)
 app.use('/api/sms', smsRouter)
+app.use('/loggerTest', loggerRouter)
 app.listen(PORT, () => {
-  console.log(`Server run on port: ${PORT}`);
+  logger.info(`Server run on port: ${PORT}`);
 });
-
-//conexion con DB
-const connectMongoDb = async()=>{
-  try {
-    await MongoSingleton.getInstance();
-    console.log("conectado a la base usando mongoose");
-  } catch (error) {
-    console.log("no se pudo conectar a la base de datos");
-  }
-}
-connectMongoDb();
