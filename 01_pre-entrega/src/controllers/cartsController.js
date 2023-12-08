@@ -35,14 +35,6 @@ export async function addProductTocartById(req, res) {
   try {
     let idCart = req.params.cid;
     let idProduct = req.params.pid;
-    if (!idCart || idProduct) {
-      CustomError.createError({
-        name: "Adding product Error",
-        cause: cartErrorInfo({ idCart, idProduct }),
-        message: "Error tratando añadir producto al carrito",
-        code: EErrors.INVALID_TYPES_ERROR,
-      });
-    }
     let response = await cartsService.addProductToCartById(idCart, idProduct);
     return res.send({
       status: "success",
@@ -51,7 +43,7 @@ export async function addProductTocartById(req, res) {
     });
   } catch (error) {
     console.log("error en Controller: ", error);
-    res.status(500).send({ status: "error", msg: error });
+    res.status(500).send({ status: "error", msg: error.message });
   }
 }
 export async function updateCart(req, res) {

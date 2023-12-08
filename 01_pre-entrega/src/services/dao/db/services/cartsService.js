@@ -1,4 +1,7 @@
+import CustomError from "../../../errors/CustomError.js";
+import { cartErrorInfo } from "../../../errors/messages/cart-error.message.js";
 import { CartModel } from "../models/cart.model.js";
+import  EErrors  from "../../../errors/errors-enum.js"
 
 export default class cartService {
   constructor() {
@@ -35,7 +38,9 @@ export default class cartService {
   addProductToCartById = async (idCart, idProduct, quantity = 1) => {
     try {
         const cart = await CartModel.findOne({ _id: idCart });
-
+        if (!cart) {
+          throw new Error( "No existe el carrito indicado")
+        }
         const existingProductIndex = cart.products.findIndex(
           (product) => product.product.toString() === idProduct
         );
@@ -54,7 +59,8 @@ export default class cartService {
         const response = await cart.save();
       return response;
     } catch (error) {
-      throw new Error(error.message);
+      console.log(error);
+      throw new Error(error);
     }
   };
   updateCart = async (idCart, data) => {

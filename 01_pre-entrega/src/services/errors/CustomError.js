@@ -5,5 +5,7 @@ export default class CustomError {
         error.name = name;
         error.code = code;
         error.cause = cause ? new Error(cause) : null;
+
+        throw error;
     }
 }
