@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/", CartsController.createCart);
 
-router.get("/", CartsController.getAllCarts);
+router.get("/allcarts", CartsController.getAllCarts);
 
 router.get("/:cid", CartsController.getCartById);
 

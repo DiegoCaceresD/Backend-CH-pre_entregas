@@ -19,12 +19,30 @@ import smsRouter from './routes/sms.router.js'
 import ProductRouter from "./routes/products.router.js";
 import compression from "express-compression";
 import  logger  from "./config/logger.js";
+import swaggerJSdoc from "swagger-jsdoc";
+import swaggerUIExpress from "swagger-ui-express";
+
+
 const app = express();
 const PORT = config.port;
 const DB = config.mongoUrl;
 const sessionRouter = new SessionRouter();
 const productRouter = new ProductRouter();
- 
+const swaggerOption = {
+  definition: {
+        openapi: "3.0.1",
+        info: {
+          title: "Documentacion Proyecto Final",
+          description: "Documentacion de mi proyescto final backend"
+        }
+  },
+  apis:[`./src/docs/**/*.yaml`]
+};
+
+const specs = swaggerJSdoc(swaggerOption);
+app.use('/apidocs', swaggerUIExpress.serve, swaggerUIExpress.setup(specs));
+
+
 //Preparo al servidor para que pueda trabajar con archivos JSON
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

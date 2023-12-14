@@ -17,7 +17,7 @@ export default class ProductRouter extends CustomRouter{
 
     this.put("/:pid",["ADMIN"], ProductController.updateProduct);
 
-    this.delete("/:pid",["ADMIN"], ProductController.deleteProduct);
+    this.delete("/delete/:pid",["ADMIN"], ProductController.deleteProduct);
 
     this.get("/mockingproducts/faker", ["PUBLIC"], ProductController.getMockingProducts);
 
