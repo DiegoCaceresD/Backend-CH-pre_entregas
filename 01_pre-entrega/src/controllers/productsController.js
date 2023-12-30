@@ -40,10 +40,11 @@ export async function getProducts(req, res) {
     if (sort) options.sort = { price: sort };
 
     let products = await productsService.getProducts(optionsQuery, options);
-    const productsDTO = products.payload.map(
+      products.payload = products.payload.map(
       (product) => new ProductsDTO(product)
     );
-    res.status(200).send(productsDTO);
+    console.log(products)
+    res.status(200).send(products);
   } catch (error) {
     res.status(400).json(error.message);
   }

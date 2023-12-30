@@ -1,7 +1,6 @@
 import { ProductModel } from "../models/product.model.js";
 import CustomError from "../../../errors/CustomError.js";
 import EErrors from "../../../errors/errors-enum.js";
-import { productErrorInfo } from "../../../errors/messages/product-error.message.js";
 import logger from "../../../../config/logger.js";
 
 export default class productsService {
@@ -44,6 +43,7 @@ export default class productsService {
           ? `http://localhost:8080/api/products?page=${data.nextPage}`
           : null,
       };
+
       return response;
     } catch (error) {
       throw new Error(error.message);
