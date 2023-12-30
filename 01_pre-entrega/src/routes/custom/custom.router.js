@@ -98,7 +98,7 @@ export default class CustomRouter {
       try {
         await callback.apply(this, params);
       } catch (error) {
-        logger.log(error);
+        logger.error(error);
         params[1].status(500).send(error);
       }
     });

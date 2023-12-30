@@ -12,7 +12,7 @@ export default class MongoSingleton {
 
     static getInstance() {
         if(this.#instance){
-            logger.warn("Ya se ha abierto una conexión a mongoDB");
+            logger.warning("Ya se ha abierto una conexión a mongoDB");
         }else{
             this.#instance = new MongoSingleton();
         }

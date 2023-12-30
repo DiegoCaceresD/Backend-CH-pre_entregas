@@ -29,7 +29,7 @@ const initializePassport = () => {
           logger.info("fin - Passport Strategy JWT");
           return done(null, jwt_payload.user);
         } catch (error) {
-          logger.error(error);
+          logger.error("passport jwt",error);
           return done(error);
         }
       }
@@ -51,7 +51,7 @@ const initializePassport = () => {
         try {
           const user = await userModel.findOne({ email: profile._json.email });
           if (!user) {
-            log.warn("usuario no existe: ", profile._json.email);
+            logger.warning("usuario no existe: ", profile._json.email);
             let newUser = {
               first_name: profile._json.name,
               last_name: "",
@@ -80,7 +80,7 @@ const initializePassport = () => {
     new localStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
-        const { first_name, last_name, email, age } = req.body;
+        const { first_name, last_name, email, age, role } = req.body;
         try {
           const userExist = await userModel.findOne({ email });
           if (userExist) {
@@ -97,6 +97,7 @@ const initializePassport = () => {
             password: createHash(password),
             cart: newCart._id,
             loggedBy: "Local",
+            role
           };
 
           const result = await userModel.create(user);
@@ -114,29 +115,20 @@ const initializePassport = () => {
     new localStrategy(
       { passReqToCallback: true, usernameField: "email" },
       async (req, username, password, done) => {
+        logger.info("inicio metodo login en passport")
         // const { first_name, last_name, email, age } = req.body;
         try {
           const user = await userModel.findOne({ email: username });
-
           if (!user) {
             logger.warning("Usuario no existe: " + username);
             return done(null, false);
           }
+          logger.info("Login - Usuario encontrado: ", user._doc )
           //validacion con bcrypt
           if (!isValidPassword(user, password)) {
-            logger.warn("invalid credentials for user: " + username);
+            logger.warning("invalid credentials for user: " + username);
             return done(null, false);
           }
-
-          const tokenUser = {
-            name: `${user.first_name} ${user.last_name}`,
-            email: user.email,
-            age: user.age,
-            role: user.role,
-          };
-
-          const access_token = generateJWToken(tokenUser);
-          logger.debug("access_token login localStrategy: ", access_token);
 
           return done(null, user);
         } catch (error) {
@@ -169,8 +161,7 @@ const cookieExtractor = (req) => {
   let token = null;
   if (req && req.cookies) {
     logger.info("cookies presentes: ", req.cookies);
-    token = req.cookies["access_Token"];
-    logger.info("Token obtenido desde Cookie: ", token);
+    token = req.cookies["jwtCookieToken"];
   }
   return token;
 };

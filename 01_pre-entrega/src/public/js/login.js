@@ -1,4 +1,3 @@
-import logger from "../../config/logger.js";
 
 const form = document.getElementById('loginForm');
 
@@ -21,10 +20,12 @@ form.addEventListener('submit', e => {
             result.json()
                 .then(json => {
                     // cookie
-                    logger.info("Cookies generadas:", document.cookie);
+                    console.log("JSON", json);
+                    console.log("Cookies generadas:", document.cookie);
+                    window.location.replace('/users');
                 })
         } else if (result.status === 401) {
-            logger.warning(result);
+            console.warn(result);
             alert("Login invalido revisa tus credenciales!");
         }
     })

@@ -18,7 +18,7 @@ export async function addProduct(req, res) {
       });
     }
     const response = await productsService.addProduct(body);
-    res.status(200).json(response);
+    res.status(201).json(response);
   } catch (error) {
     res.status(400).json(error.message);
   }
@@ -43,7 +43,6 @@ export async function getProducts(req, res) {
       products.payload = products.payload.map(
       (product) => new ProductsDTO(product)
     );
-    console.log(products)
     res.status(200).send(products);
   } catch (error) {
     res.status(400).json(error.message);

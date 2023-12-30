@@ -9,7 +9,7 @@ const router = Router();
 
 export default class ProductRouter extends CustomRouter{
   init() {
-    this.post("/",["ADMIN"], ProductController.addProduct);
+    this.post("/",["PUBLIC"], ProductController.addProduct);
     
     this.get("/",["PUBLIC"], ProductController.getProducts);
 
